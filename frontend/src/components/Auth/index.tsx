@@ -15,8 +15,8 @@ const Auth = () => {
 
   const kakaoLogin = async() => {
     try{
-        const res = await axios.get(`/oauth2/oauth2/callback/${code}`);
-        console.log(res);
+      const res = await axios.get(`/api/login/oauth2/callback/kakao/${code}`);
+        console.log(res.data);
     }
     catch(err){
       console.error(err);
