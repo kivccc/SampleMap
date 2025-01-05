@@ -12,13 +12,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
-    <React.StrictMode>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/main" element={<Main />}/>
-        <Route path="/login/oauth2/callback/kakao" element={<Auth />} />
-      </Routes>
-    </React.StrictMode>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/main" element={<Main />}/>
+      <Route path="/login/oauth2/callback/kakao" element={<Auth />} />
+    </Routes>
   </BrowserRouter>
 );
 
