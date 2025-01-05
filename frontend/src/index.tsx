@@ -1,9 +1,11 @@
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import Auth from "./components/Auth/index";
+import Main from "./components/Main/index";
+import Login from "./components/Login/index";
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +13,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/main" element={<Main />}/>
+        <Route path="/login/oauth2/callback/kakao" element={<Auth />} />
+      </Routes>
     </React.StrictMode>
   </BrowserRouter>
 );
