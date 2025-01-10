@@ -8,14 +8,11 @@ export const MapContainer = styled.div`
 `
 
 export const ButtonDiv = styled.div`
-  top : 25px;
-  z-index: 10;
-  right : 25px;
-  position : fixed;
+  margin : 10px 25px;
 `
 
 const Button = styled.button`
-  width : 75px;
+  width : 50px;
   height: 50px;
   border : none;
   padding: 10px;
@@ -27,7 +24,11 @@ const Button = styled.button`
   border-radius : 25px;
 `
 
-export const Private = styled(Button)`
+export const Save = styled(Button)`
+  background-color : #AAAAAA;
+`
+
+export const Personal = styled(Button)`
   background-color : #30e291;
 `
 
