@@ -4,29 +4,22 @@ import { useState, useEffect } from "react";
 import useKakaoLoader from "../useKakaoLoader";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import styled from "styled-components";
+import Textarea from 'react-textarea-autosize';
 
+import mainLogo from '../../img/main_logo.png';
 import markerAll from '../../img/markerAll.png';
 import markerGroup from '../../img/markerGroup.png';
 import markerPersonal from '../../img/markerPersonal.png';
 
+import allText from '../../img/all.png';
+import saveText from '../../img/save.png';
+import groupText from '../../img/group.png';
+import cancelText from '../../img/cancel.png';
+import recordText from '../../img/record.png';
+import personalText from '../../img/personal.png';
 
 
 const Main = () => {
-  // 브라우저 높이 변화 감지 및 지정 관련 코드
-  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
-  const getWindowHeight = () => {
-    setWindowHeight(window.innerHeight);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", getWindowHeight);
-
-    return () => {
-      window.removeEventListener("resize", getWindowHeight);
-    };
-  }, []);
-
-
 
   const [userData, setUserData] = useState(null);
   // 예시 JWT 설정
@@ -77,17 +70,31 @@ const Main = () => {
 
 
 
+  const [type, setType] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [text, setText] = useState<string>('');
   const saveUserPlace = async() => {
     try{
-      // const res = await axios.get("exampleAPI/${jwt}");
+      // const res = await axios.post(
+      //   "/savePlace/personal", 
+      //   {
+      //      type: type, marker: markers, title: title, text: text,
+      //   }
+      // );
       // console.log(res.data);
       // setUserData(res.data);
+      setType('');
+      setTitle('');
+      setText('');
+      setIsRecordON(false);
+      setMarkers([]);
     }
     catch(err){
       console.error(err);
     }
   };
 
+  console.log(type, title, text);
   interface Marker {
     position: {
       lat: number;
@@ -96,6 +103,7 @@ const Main = () => {
   }
 
   const [markers, setMarkers] = useState<Marker[]>([]);
+  const [isRecordOn, setIsRecordON] = useState<boolean>(true);
 
   return (
     <M1.MapContainer>
@@ -125,7 +133,7 @@ const Main = () => {
             title={position.title}
           />
         ))}
-        {markers.map((marker, index) =>
+        {isRecordOn && markers.map((marker) =>
           marker.position.lat !== null && marker.position.lng !== null ? (
           <MapMarker
             key={`${marker.position.lat}-${marker.position.lng}`}
@@ -140,92 +148,43 @@ const Main = () => {
           )
         )}
       </Map>
-      <ContentContainer>
+      <M1.ContentContainer>
+        <M1.LogoImg src={mainLogo} />
+        {isRecordOn?
+        <>
+        <M1.RecordImg src={recordText} />
+        <M1.Contents>
+          <M1.Content>
+            <p> 추억할 위치를 지정하고 기록해주세요... </p>
+            <input placeholder="제목" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+            <Textarea placeholder="추억을 기록하세요..." value={text} onChange={(e) => setText(e.target.value)}></Textarea>
+            <M1.ButtonDiv>
+            <M1.CancelImg src={cancelText} onClick={saveUserPlace}/>
+            <M1.SaveImg src={saveText} onClick={saveUserPlace}/>
+            </M1.ButtonDiv>
+          </M1.Content>
+        </M1.Contents>
+        </>
+        :
+        <>
+        <M1.RecordImgSide src={recordText} onClick={() => setIsRecordON(true)}/>
         <M1.ButtonDiv>
-          <M1.Save> 기록 </M1.Save>
-          <M1.Personal onClick={personalOnClick}> 개인 </M1.Personal>
-          <M1.Group onClick={groupOnClick}> 그룹 </M1.Group>
-          <M1.All onClick={allOnClick}> 전체 </M1.All>
+          <M1.All src={allText} onClick={allOnClick} />
+          <M1.Personal src={personalText} onClick={personalOnClick} />
+          <M1.Group src={groupText} onClick={groupOnClick} />
         </M1.ButtonDiv>
-        <Contents>
-          <Content>
-            <div>
-            {markers.map((marker, index) => (
-              <p key={index}>
-                {marker.position.lat}, {marker.position.lng}
-              </p>
-            ))}
-            </div>
-            <p> 기록할 위치를 지정해주세요... </p>
-            <input placeholder="제목"></input>
-
-            <textarea placeholder="추억을 기록하세요..."></textarea>
-          </Content>
-        </Contents>
-      </ContentContainer>
+        <M1.Contents>
+        {filteredPositions.map((position) => (
+          <M1.Content key={`${position.title}-${position.latlng.lat}-${position.latlng.lng}`}>
+            <p> {position.title} </p>
+            <p> {position.content} </p>
+          </M1.Content>
+        ))}
+        </M1.Contents>
+        </>}
+      </M1.ContentContainer>
     </M1.MapContainer>
   );
 }
 
 export default Main;
-
-/*
-        {filteredPositions.map((position) => (
-          <Content
-            key={`${position.title}-${position.latlng.lat}-${position.latlng.lng}`}
-          >
-            <p> {position.title} </p>
-            <p> {position.content} </p>
-          </Content>
-        ))}
-*/
-
-
-const ContentContainer = styled.div`
-  height : 37.5%;
-  width : 100%;
-  bottom : 0px;
-  z-index : 10;
-  display : flex;
-  position : fixed;
-  align-items : center;
-  flex-direction : column;
-`
-
-const Contents = styled.div`
-  width : 100%;
-  overflow : scroll;
-
-  &::-webkit-scrollbar {
-    display : none;
-  }
-`
-
-const Content = styled.div`
-  width : 100%;
-  margin : 25px 0px;
-  border-top : 1px solid #000000;
-  border-bottom : 1px solid #000000;
-
-  input {
-    width : 100%;
-    border : none;
-    padding : 10px 0px;
-    text-align : center;
-  }
-
-  textarea {
-    width : 100%;
-    border : none;
-    padding : 10px 0px;
-    text-align : center;
-  }
-
-  p {
-    padding : 10px;
-    text-align : center;
-  }
-`
-
-/*
-*/

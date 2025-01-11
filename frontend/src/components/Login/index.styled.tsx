@@ -53,6 +53,7 @@ export const Comment = styled.p`
 `;
 
 export const LoginImg = styled(LogoImg)`
+  padding : 0px;
   cursor : pointer;
-  margin : 0px 0px 25px;
+  margin : 50px 50px 75px;
 `
