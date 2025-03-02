@@ -1,10 +1,8 @@
 package org.example.backend.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.backend.domain.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TokenProvider {
@@ -41,23 +40,20 @@ public class TokenProvider {
                 .compact();
     }
 
-    public boolean validToken(String token){
-        try {
-            Jwts.parser()
-                    .setSigningKey(jwtProperties.getSecretKey())
-                    .parseClaimsJws(token);
-            return true;
-        } catch (Exception e){
-            return false;  //복호화 에러시 false
-        }
+    public void validateToken(String token) {
+        Jwts.parser()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token);
     }
+
 
     public Authentication getAuthentication(String token){
         Claims claims=getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
+        User user=new User(getUserId(token),claims.getSubject());
+        return new UsernamePasswordAuthenticationToken(user, "", authorities);
+        //UserDetails userDetails = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
+        //return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
     private Claims getClaims(String token){

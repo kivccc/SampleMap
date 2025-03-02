@@ -19,7 +19,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserDetailService userDetailService;
 
-    public static final Duration ACCESS_TOKEN_DURATION=Duration.ofHours(2);
+    //테스트용으로 300시간설정
+    public static final Duration ACCESS_TOKEN_DURATION=Duration.ofHours(300);
 
     public KakaoLoginResponseDto authenticate(KakaoUserInfoResponseDto userInfo){
         Optional<User> userOptional=userRepository.findById(userInfo.getId());

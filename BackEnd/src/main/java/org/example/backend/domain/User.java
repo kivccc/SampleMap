@@ -28,6 +28,10 @@ public class User implements UserDetails {
     @Column(name = "name",nullable = true)
     private String name;
 
+    public User(Long userId,String username){
+        this.id=userId;
+        this.name=username;
+    }
     public static User createUser(KakaoUserInfoResponseDto userinfo){
         log.info(" [Creating User] ------------------> {}", userinfo.getId()+" "+userinfo.getKakaoAccount().getProfile().getNickName());
         User user=new User();

@@ -20,7 +20,9 @@ public class WebSecurityConfig {
     private final TokenProvider tokenProvider;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(configurer->configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login/**").permitAll()
                         .anyRequest().authenticated())

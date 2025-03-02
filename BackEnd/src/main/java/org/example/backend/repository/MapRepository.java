@@ -1,16 +1,13 @@
 package org.example.backend.repository;
 
-
+import org.example.backend.domain.PersonalPlace;
 import org.example.backend.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-
-    Optional<User> findById(Long id);
-    Optional<User> findByName(String name);
-
+public interface MapRepository extends JpaRepository<PersonalPlace,Long> {
+    List<PersonalPlace> findByUser(User user);
 }

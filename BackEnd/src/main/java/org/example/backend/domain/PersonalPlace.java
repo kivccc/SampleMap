@@ -21,7 +21,26 @@ public class PersonalPlace {
     private User user;
 
     private String placeName;
+    private String placeText;
     private Double latitude;
     private Double longitude;
     private LocalDateTime visitedAt;
+
+    public static PersonalPlace createPersonalPlace(
+            User user,
+            String placeName,
+            String placeText,
+            Double lat,
+            Double lng,
+            LocalDateTime visitedAt
+    ) {
+        PersonalPlace place = new PersonalPlace();
+        place.setUser(user);
+        place.setPlaceName(placeName);
+        place.setPlaceText(placeText);
+        place.setLatitude(lat);
+        place.setLongitude(lng);
+        place.setVisitedAt(visitedAt);
+        return place;
+    }
 }
